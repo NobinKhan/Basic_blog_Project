@@ -24,16 +24,20 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            <a class="nav-link {% block homeactive %}
+                            {% endblock homeactive %}" aria-current="page" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/blog">Blog</a>
+                            <a class="nav-link {% block blogactive %}
+                            {% endblock blogactive %}" href="/blog">Blog</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/about">About</a>
+                            <a class="nav-link {% block aboutactive %}
+                            {% endblock aboutactive %}" href="/about">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/contact">Contact</a>
+                            <a class="nav-link {% block contactactive %}
+                            {% endblock contactactive %}" href="/contact">Contact</a>
                         </li>
                     </ul>
                     <form class="d-flex">
@@ -46,6 +50,13 @@
     </header>
 
     <main>
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mb-0 alert-dismissible fade show" role="alert">
+            <strong>Alert!</strong> {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
     {% block main %}
     {% endblock main %}
     </main>
