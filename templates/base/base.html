@@ -49,6 +49,7 @@
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success mx-1" type="submit">Search</button>
                     </form>
+                    {% if not user.is_authenticated %}
                     <!-- login Button trigger modal -->
                     <button type="button" class="btn btn-success mx-1" data-bs-toggle="modal"
                         data-bs-target="#loginModal">
@@ -60,6 +61,10 @@
                         data-bs-target="#signupModal">
                         Sign up
                     </button>
+                    {% else %}
+                        
+                    <a href="/logout/" class="btn btn-success mx-1">{{ request.user }} Logout</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>
@@ -124,7 +129,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="/login/" method="POST">
 
                         <div class="mb-3">
                             <label for="loginusername" class="form-label">Username</label>
@@ -132,10 +137,11 @@
                                 aria-describedby="usernameHelp" placeholder="Enter lowercase and alphanumeric only">
                         </div>
                         <div class="mb-3">
-                            <label for="Password" class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" id="Password"
+                            <label for="loginpassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="loginpassword" id="loginpassword"
                                 placeholder="Enter password">
                         </div>
+                        {% csrf_token %}
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

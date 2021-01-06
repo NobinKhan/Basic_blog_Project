@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Contact
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -27,7 +28,7 @@ def about(request):
     return render(request, 'home/about.html')
 
 
-def handlesignup(request):
+def handleSignup(request):
     # request validation
     try:
         if request.method != 'POST':
@@ -61,3 +62,36 @@ def handlesignup(request):
     except:
         return render(request, 'home/home.html')
 
+
+def handleLogin(request):
+    try:
+        if request.method != 'POST':
+            messages.error(request, "Please fill up the form correctly!")
+            return redirect(request.META['HTTP_REFERER'])
+
+        #  collect User information
+        loginusername = request.POST['loginusername']
+        loginpassword = request.POST['loginpassword']
+
+        # validating user information
+        user = authenticate(username=loginusername, password=loginpassword)
+
+        # saving user information
+        if user is not None:
+            login(request, user)
+            messages.success(request, "You have successfully logged in")
+            return redirect(request.META['HTTP_REFERER'])
+        else:
+            messages.error(request, "Username or Password is not matched. Please try again !")
+            return redirect(request.META['HTTP_REFERER'])
+    except:
+        return render(request, 'home/home.html')
+
+
+def handleLogout(request):
+    try:
+        logout(request)
+        messages.success(request, "Successfully log out!")
+        return redirect(request.META['HTTP_REFERER'])
+    except:
+        return render(request, 'home/home.html')
