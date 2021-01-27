@@ -3,6 +3,7 @@ from .models import Contact
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.views.generic.base import TemplateView
 
 # Create your views here.
 def home(request):
