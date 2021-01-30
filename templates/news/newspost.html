@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 
 {% block title %}
-    {{ postname }}
+{{post.title}}
 {% endblock title %}
 
 {% block blogactive %}
@@ -9,6 +9,18 @@ active
 {% endblock blogactive %}
 
 {% block main %}
-    <h1>This is {{postname}} post page</h1>
+{% for post in fullpost %}
+
+<article class="container my-3">
+    <h2 class="blog-post-title">{{post.title}}</h2>
+    <p class="blog-post-meta">{{post.timestamp| timesince}} ago</p>
+    <div class="d-flex align-items-center justify-content-center">
+            <img src="{{post.photo.url}}" class="rounded mx-auto d-block img-fluid" alt="...">
+    </div>
+    <p>{{post.content}}</p>
+    <hr>
+</article>
+
+{% endfor %}
 
 {% endblock main %}

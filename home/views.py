@@ -4,10 +4,17 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views.generic.base import TemplateView
+from news.models import News
 
 # Create your views here.
+
+    
 def home(request):
-    return render(request, 'home/home.html')
+    news = News.objects.all().order_by('-timestamp')
+    context = {
+        'news': news,
+    }
+    return render(request, 'home/home.html', context)
 
 
 def contact(request):
@@ -27,6 +34,27 @@ def contact(request):
 
 def about(request):
     return render(request, 'home/about.html')
+
+
+def search(request):
+    try:
+        if request.method != 'POST':
+            messages.error(request, "Please fill up the form correctly!")
+            return redirect(request.META['HTTP_REFERER'])
+        search = request.POST['search']
+        if search == '' or str.__len__(search) > 50:
+            context = {
+                'search':search,
+            }
+            return render(request, 'home/search.html', context)
+        result = News.objects.filter(tag__icontains=search)
+        context = {
+            'news':result,
+            'search':search,
+        }
+        return render(request, 'home/search.html', context)
+    except:
+        return render(request, 'home/search.html')
 
 
 def handleSignup(request):

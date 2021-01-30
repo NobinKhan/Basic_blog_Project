@@ -11,22 +11,31 @@ active
 
 {% block main %}
 
-<div class="container my-3">
-	<div class="card mb-3" style="max-width: 700px;">
-		<div class="row no-gutters">
-		  <div class="col-md-4">
-			<img src="..." alt="...">
-		  </div>
-		  <div class="col-md-8">
-			<div class="card-body">
-			  <h5 class="card-title">Card title</h5>
-			  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-			</div>
-		  </div>
-		</div>
-	  </div>
+<!-- posts -->
+{% for post in news %}
+<div class="card bg-secondary mb-3 mt-5 shadow-lg p-3 mb-5 bg-white rounded d-flex align-items-center justify-content-center"
+    style="margin-left: 400px; max-width: 1000px;">
+    <div class="row no-gutters">
+        <div class="col-md-5">
+            <img src="{{post.photo.url}}" class="rounded mx-auto d-block img-thumbnail" alt="...">
+        </div>
+        
+        <div class="col-md-7">
+            
+            <div class="card-body align-items-center">
+            
+                <h4 class="card-title">{{post.title}}</h4>
+                <p class="card-text">{{post.content|truncatechars:200}}</p>
+                <a href="/news/{{post.slug}}" class="btn btn-primary">Continue Reading..</a>
+                <p class="card-text"><small class="text-muted">{{post.timestamp| timesince}}</small></p>
+                
+            </div>
+            
+        </div>
+        
+    </div>
 </div>
+{% endfor %}
 
 
 {% endblock main %}

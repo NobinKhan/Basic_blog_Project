@@ -1,0 +1,50 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Search
+{% endblock title %}
+
+{% block main %}
+<div class='container my-3'>
+    <article class='col-md-10'>
+        <h2>Search results:</h2>
+        <!-- posts -->
+        {% if news|length == 0 %}
+        <p>No search result found</p>
+        <p>Your search - {{search}} - did not match any documents.<br>
+            <br>
+            Suggestions:<br>
+            <br>
+            Make sure that all words are spelled correctly.<br>
+            * Try different keywords.<br>
+            * Try more general keywords.<br>
+            * Try fewer keywords.<br>
+            {% endif %}
+        </p>
+    </article>
+    {% for post in news %}
+    <div class="card bg-secondary mt-5 shadow-lg p-3 mb-5 bg-white rounded d-flex align-items-center justify-content-center"
+        style="margin-left: 100px; max-width: 1000px;">
+        <div class="row no-gutters">
+            <div class="col-md-5">
+                <img src="{{post.photo.url}}" class="rounded mx-auto d-block img-thumbnail" alt="...">
+            </div>
+
+            <div class="col-md-7">
+
+                <div class="card-body align-items-center">
+
+                    <h4 class="card-title">{{post.title}}</h4>
+                    <p class="card-text">{{post.content|truncatechars:200}}</p>
+                    <a href="/news/{{post.slug}}" class="btn btn-primary">Continue Reading..</a>
+                    <p class="card-text"><small class="text-muted">{{post.timestamp| timesince}}</small></p>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock main %}

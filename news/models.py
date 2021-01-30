@@ -8,6 +8,6 @@ class News(models.Model):
     content = models.TextField()
     photo = models.ImageField()
     slug = models.CharField(max_length=250)
-    timestamp = models.TimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
 

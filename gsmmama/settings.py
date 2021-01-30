@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news.apps.NewsConfig',
     'home.apps.HomeConfig',
+    'smartphone.apps.SmartphoneConfig',
 ]
 
 MIDDLEWARE = [
