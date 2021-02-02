@@ -1,7 +1,7 @@
-from django.http.request import HttpRequest
-from django.http.response import HttpResponse
-from django.shortcuts import render
-from .models import News
+
+from django.shortcuts import render, redirect
+from .models import News, Comments
+from django.contrib import messages
 
 # Create your views here.
 def newshome(request):
@@ -13,8 +13,23 @@ def newshome(request):
 
 
 def newspost(request, slugs):
-    post = News.objects.filter(slug=slugs)
+    post = News.objects.filter(slug=slugs).first()
+    comment = Comments.objects.filter(news=post)
     context = {
-        'fullpost': post,
+        'post': post,
+        'comments': comment,
     }
     return render(request, 'news/newspost.html', context)
+
+
+def comments(request):
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        user = request.user
+        postsn = request.POST.get('postsn')
+        post = News.objects.get(sn=postsn)
+
+        comments = Comments(comment=comment, user=user, news=post)
+        comments.save()
+        messages.success(request, 'Your comments has been successfully submitted')
+    return redirect(request.META['HTTP_REFERER'])

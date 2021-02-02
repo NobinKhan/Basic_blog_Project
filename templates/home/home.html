@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}
 GSMmama
@@ -112,7 +113,7 @@ active
                 <h4 class="card-title">{{post.title}}</h4>
                 <p class="card-text">{{post.content|truncatechars:200}}</p>
                 <a href="/news/{{post.slug}}" class="btn btn-primary">Continue Reading..</a>
-                <p class="card-text"><small class="text-muted">{{post.timestamp| timesince}}</small></p>
+                <p class="card-text"><small class="text-muted">{{post.timestamp| naturaltime}}</small></p>
                 
             </div>
             

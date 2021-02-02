@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig',
     'home.apps.HomeConfig',
     'smartphone.apps.SmartphoneConfig',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
