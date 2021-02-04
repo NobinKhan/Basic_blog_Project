@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load humanize %}
+{% load extras %}
 
 {% block title %}
 {{post.title}}
@@ -23,40 +24,98 @@ active
     <hr>
 </article>
 <!-- comments section -->
-<div class="container mb-10">
+<div class="container">
     <h2>Comments:({{comments.count}})</h2>
 
-    {% if user.is_authenticated %}
+    <div class="my-2">
+        {% if user.is_authenticated %}
+        <form action="/news/comments/" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Enter Comment</label>
+                <input type="text" class="form-control" name="comment" id="comment" placeholder="Enter your comment">
+                <input type="hidden" name="postsn" id="postsn" value="{{post.sn}}">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
 
-    <form action="/news/comments/" method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Enter Comment</label>
-            <input type="text" class="form-control" name="comment" id="comment" placeholder="Enter your comment">
-            <input type="hidden" name="postsn" id="postsn" value="{{post.sn}}">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-    {% else %}
-    <h4>Please login to make comments</h4>
-    {% endif %}
+        {% else %}
+        <h4>Please login to make comment or reply</h4>
+        {% endif %}
+    </div>
 
     {% for comment in comments %}
     <div class="row my-3">
-        <div class="col-md-1 ">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-bounding-box  img-fluid img-thumbnail" viewBox="0 0 16 16">
-                <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/>
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-              </svg>
+        <div class="col-md-1" style="width: 80px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                class="bi bi-person-bounding-box  img-fluid img-thumbnail" viewBox="0 0 16 16">
+                <path
+                    d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z" />
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            </svg>
         </div>
         <div class="col-md-11">
             <b>{{comment.user}}</b>
-            <span class="badge bg-secondary">
-            {{comment.timestamp| naturaltime}}
-            </span>
-            <div><p>
-                {{comment.comment}}</p>
+            <span class="badge bg-secondary">{{comment.timestamp| naturaltime}}</span>
+            <div>
+                <p>{{comment.comment}}</p>
+            </div>
+
+            <!-- enter reply -->
+            {% if user.is_authenticated %}
+            <div class="mx-0">
+                <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#replybox{{comment.sn}}" aria-expanded="false"
+                    aria-controls="replybox{{comment.sn}}">
+                    Reply
+                </button>
+                <div class="collapse" id="replybox{{comment.sn}}">
+                    <form action="/news/comments/" method="post">
+                        {% csrf_token %}
+                        <div class="my-2">
+                            <label for="exampleInputEmail1" class="form-label">Enter Your Reply</label>
+                            <input type="text" class="form-control" name="comment" id="comment"
+                                placeholder="Enter your reply">
+                            <input type="hidden" name="postsn" id="postsn" value="{{post.sn}}">
+                            <input type="hidden" name="parentsn" id="parentsn" value="{{comment.sn}}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+            {% else %}
+
+            <button type="button" class="d-flex btn btn-sm btn-primary mx-1" data-bs-toggle="modal"
+                data-bs-target="#loginModal">
+                Login to reply
+            </button>
+            
+            {% endif %}
+
+            <!-- show reply -->
+            <div class="replies my-2">
+                {% for reply in replies|get_val:comment.sn %}
+                <div class="row my-2">
+                    <div class="col-md-1" style="width: 80px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                            class="bi bi-person-bounding-box  img-fluid img-thumbnail" viewBox="0 0 16 16">
+                            <path
+                                d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z" />
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        </svg>
+                    </div>
+                    <div class="col-md-11">
+                        <b>{{reply.user}}</b>
+                        <span class="badge bg-secondary">{{reply.timestamp| naturaltime}}</span>
+                        <div>
+                            <p>{{reply.comment}}</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                {% endfor %}
             </div>
         </div>
     </div>

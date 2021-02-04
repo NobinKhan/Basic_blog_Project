@@ -17,7 +17,7 @@ class News(models.Model):
 
 class Comments(models.Model):
     sn = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank = True, null = True, on_delete=models.CASCADE)
     news = models.ForeignKey(News, on_delete=models.CASCADE)
     comment = models.TextField()
     parent = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
