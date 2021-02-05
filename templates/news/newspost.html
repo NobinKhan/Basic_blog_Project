@@ -17,10 +17,9 @@ active
     <h2 class="blog-post-title">{{post.title}}</h2>
     <p class="blog-post-meta">{{post.timestamp| naturaltime}}</p>
     <div class="d-flex align-items-center justify-content-center">
-        <img src="{{post.photo.url}}" class="rounded mx-auto d-block img-fluid"
-            style="max-width: 700px; min-width: 700px;" alt="...">
+        
     </div>
-    <p>{{post.content}}</p>
+    <p>{{post.content| safe}}</p>
     <hr>
 </article>
 <!-- comments section -->
@@ -46,7 +45,7 @@ active
 
     {% for comment in comments %}
     <div class="row my-3">
-        <div class="col-md-1" style="width: 80px;">
+        <div class="col-md-1" style="width: 60px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
                 class="bi bi-person-bounding-box  img-fluid img-thumbnail" viewBox="0 0 16 16">
                 <path
@@ -97,7 +96,7 @@ active
             <div class="replies my-2">
                 {% for reply in replies|get_val:comment.sn %}
                 <div class="row my-2">
-                    <div class="col-md-1" style="width: 80px;">
+                    <div class="col-md-1" style="width: 60px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
                             class="bi bi-person-bounding-box  img-fluid img-thumbnail" viewBox="0 0 16 16">
                             <path

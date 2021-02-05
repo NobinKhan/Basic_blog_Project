@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'smartphone.apps.SmartphoneConfig',
     'django.contrib.humanize',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
