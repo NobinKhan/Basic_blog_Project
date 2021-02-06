@@ -4,6 +4,7 @@ from .models import News, Comments
 
 class NewsAdmin(admin.ModelAdmin):
     list_display = ['sn', 'title', 'tag', 'timestamp']
+    prepopulated_fields = {'slug':('title',)}
 
 
 class CommentsAdmin(admin.ModelAdmin):
