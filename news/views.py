@@ -38,13 +38,12 @@ def comments(request):
         postsn = request.POST.get('postsn')
         post = News.objects.get(sn=postsn)
         parentsn = request.POST.get('parentsn')
-        parent = Comments.objects.get(sn=parentsn)
-
-        if parentsn == '':
+        if parentsn == None:
             comments = Comments(comment=comment, user=user, news=post)
             comments.save()
             messages.success(request, 'Your comments has been successfully submitted')
         else:
+            parent = Comments.objects.filter(sn=parentsn).first()
             comments = Comments(comment=comment, user=user, news=post, parent=parent)
             comments.save()
             messages.success(request, 'Your reply has been successfully submitted')
